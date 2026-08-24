@@ -14,13 +14,18 @@ namespace DigitalWalletDemo.Domain.Entities
 
         public decimal Balance { get; set; }
 
-        public UserStatus Status { get; set; }
+        public WalletStatus Status { get; set; }
 
         public DateTime? LastTransactionAt { get; set; }
 
         public long Version { get; set; }
 
         public User User { get; set; } = null!;
-        public List<WalletTransaction> Transactions { get; set; } = new List<WalletTransaction>();
+
+        public List<WalletTransaction> OutgoingTransactions { get; set; }
+            = new List<WalletTransaction>();
+
+        public List<WalletTransaction> IncomingTransactions { get; set; }
+            = new List<WalletTransaction>();
     }
 }

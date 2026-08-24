@@ -19,11 +19,7 @@ namespace DigitalWalletDemo.Domain.Entities
 
         public DateTime CreatedAt { get; set; }
 
-        public Wallet? FromWallet { get; set; }
-
         public Guid? FromWalletId { get; set; }
-
-        public Wallet? ToWallet { get; set; }
 
         public Guid? ToWalletId { get; set; }
 
@@ -34,5 +30,9 @@ namespace DigitalWalletDemo.Domain.Entities
         public string IdempotencyKey { get; set; } = null!;
 
         public string? FailureReason { get; set; }
+
+        public Wallet? FromWallet { get; set; }
+
+        public Wallet? ToWallet { get; set; }
     }
 }
