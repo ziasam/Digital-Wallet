@@ -1,4 +1,13 @@
+using DigitalWalletDemo.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<DigitalWalletDemoDbContext>(options =>
+{
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("Default"));
+});
 
 // Add services to the container.
 
