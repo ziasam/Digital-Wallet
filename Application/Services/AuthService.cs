@@ -88,9 +88,7 @@ public class AuthService : IAuthService
 
             Token = token.Token,
 
-            ExpiresAt = token.ExpiresAt,
-
-            Wallets = user.Wallets
+            ExpiresAt = token.ExpiresAt
         };
     }
 
@@ -147,9 +145,7 @@ public class AuthService : IAuthService
 
             Token = token.Token,
 
-            ExpiresAt = token.ExpiresAt,
-
-            Wallets = user.Wallets
+            ExpiresAt = token.ExpiresAt
         };
     }
 

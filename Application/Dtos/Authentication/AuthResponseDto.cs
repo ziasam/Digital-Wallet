@@ -1,4 +1,6 @@
-﻿namespace DigitalWalletDemo.Application.Dtos.Authentication
+﻿using DigitalWalletDemo.Domain.Entities;
+
+namespace DigitalWalletDemo.Application.Dtos.Authentication
 {
     public class AuthResponseDto
     {
@@ -11,7 +13,5 @@
         public string Token { get; set; } = null!;
 
         public DateTime ExpiresAt { get; set; }
-
-        public List<Wallet> Wallets { get; set; } = null;
     }
 }
