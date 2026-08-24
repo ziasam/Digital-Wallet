@@ -1,9 +1,10 @@
-﻿using DigitalWalletDemo.Domain.Entities;
+﻿using DigitalWalletDemo.Application.Interfaces;
+using DigitalWalletDemo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigitalWalletDemo.Infrastructure.Data
 {
-    public class DigitalWalletDemoDbContext : DbContext
+    public class DigitalWalletDemoDbContext : DbContext, IDigitalWalletDemoDbContext
     {
         public DigitalWalletDemoDbContext(
             DbContextOptions<DigitalWalletDemoDbContext> options)
