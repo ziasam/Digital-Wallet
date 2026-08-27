@@ -35,28 +35,4 @@ public class WalletService : IWalletService
                 wallet.LastTransactionAt
         };
     }
-
-    public Task<TransactionResponseDto> Deposit(
-        string userId,
-        DepositRequestDto request,
-        string idempotencyKey)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<TransactionResponseDto> Withdraw(
-        string userId,
-        WithdrawRequestDto request,
-        string idempotencyKey)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<TransactionResponseDto> Transfer(
-        string userId,
-        TransferRequestDto request,
-        string idempotencyKey)
-    {
-        throw new NotImplementedException();
-    }
 }

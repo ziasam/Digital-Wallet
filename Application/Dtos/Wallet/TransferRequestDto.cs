@@ -11,5 +11,7 @@
         public string Currency { get; set; } = null!;
 
         public string? Reference { get; set; }
+
+        public string IdempotencyKey { get; set; } = string.Empty;
     }
 }

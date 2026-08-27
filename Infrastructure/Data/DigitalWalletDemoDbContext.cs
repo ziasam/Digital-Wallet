@@ -1,6 +1,7 @@
 ﻿using DigitalWalletDemo.Application.Interfaces;
 using DigitalWalletDemo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DigitalWalletDemo.Infrastructure.Data
 {
@@ -22,12 +23,18 @@ namespace DigitalWalletDemo.Infrastructure.Data
         public DbSet<TransactionRequest> TransactionRequests =>
             Set<TransactionRequest>();
 
+        public new DatabaseFacade Database => base.Database;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(
                 typeof(DigitalWalletDemoDbContext).Assembly);
+
+            modelBuilder.Entity<TransactionRequest>()
+                .HasIndex(x => x.IdempotencyKey)
+                .IsUnique();
         }
     }
 }

@@ -11,5 +11,7 @@
         public string? Counterparty { get; set; }
 
         public string? Reference { get; set; }
+
+        public string IdempotencyKey { get; set; } = string.Empty;
     }
 }

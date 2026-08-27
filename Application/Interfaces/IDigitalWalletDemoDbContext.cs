@@ -1,5 +1,6 @@
 ﻿using DigitalWalletDemo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DigitalWalletDemo.Application.Interfaces
 {
@@ -12,6 +13,8 @@ namespace DigitalWalletDemo.Application.Interfaces
         DbSet<WalletTransaction> WalletTransactions { get; }
 
         DbSet<TransactionRequest> TransactionRequests { get; }
+
+        public DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(
             CancellationToken cancellationToken = default);

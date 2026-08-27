@@ -1,5 +1,4 @@
 ﻿using DigitalWalletDemo.Domain.Enums;
-using System.Transactions;
 
 namespace DigitalWalletDemo.Domain.Entities
 {
