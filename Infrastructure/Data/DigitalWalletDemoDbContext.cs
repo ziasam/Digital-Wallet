@@ -32,6 +32,19 @@ namespace DigitalWalletDemo.Infrastructure.Data
             modelBuilder.ApplyConfigurationsFromAssembly(
                 typeof(DigitalWalletDemoDbContext).Assembly);
 
+
+            modelBuilder.HasSequence<long>("UserIdSequence")
+                .StartsAt(1001)
+                .IncrementsBy(1);
+
+            modelBuilder.HasSequence<long>("WalletIdSequence")
+                .StartsAt(1001)
+                .IncrementsBy(1);
+
+            modelBuilder.HasSequence<long>("TransactionIdSequence")
+                .StartsAt(1001)
+                .IncrementsBy(1);
+
             modelBuilder.Entity<TransactionRequest>()
                 .HasIndex(x => x.IdempotencyKey)
                 .IsUnique();

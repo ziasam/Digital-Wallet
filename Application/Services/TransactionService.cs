@@ -19,7 +19,7 @@ public class TransactionService
         _db = db;
         _configuration = configuration;
     }
-
+    
     public async Task<List<TransactionResponseDto>> GetHistory(
         Guid userId,
         Guid walletId)
@@ -207,10 +207,18 @@ public class TransactionService
         }
     }
 
+    private async Task<long> GetNextTransactionSequence()
+    {
+        return await _db.Database
+            .SqlQuery<long>(
+                $"""SELECT nextval('"TransactionIdSequence"') AS "Value" """)
+            .SingleAsync();
+    }
+
     private async Task<string> GenerateTransactionId()
     {
-        // PostgreSQL sequence will be implemented here.
-        throw new NotImplementedException();
+        var sequence = await GetNextTransactionSequence();
+        return $"TXN-{sequence:D4}";
     }
 
     private static void ValidateWallet(

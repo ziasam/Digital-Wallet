@@ -3,6 +3,8 @@ using DigitalWalletDemo.Application.Interfaces;
 using DigitalWalletDemo.Domain.Entities;
 using DigitalWalletDemo.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DigitalWalletDemo.Application.Services;
 
@@ -149,15 +151,31 @@ public class AuthService : IAuthService
         };
     }
 
+    private async Task<long> GetNextUserSequence()
+    {
+        return await _db.Database
+            .SqlQuery<long>(
+                $"""SELECT nextval('"UserIdSequence"') AS "Value" """)
+            .SingleAsync();
+    }
+
     private async Task<string> GenerateNextUserId()
     {
-        // PostgreSQL sequence will be implemented here.
-        throw new NotImplementedException();
+        var sequence = await GetNextUserSequence();
+        return $"USR-{sequence:D4}";
+    }
+
+    private async Task<long> GetNextWalletSequence()
+    {
+        return await _db.Database
+            .SqlQuery<long>(
+                $"""SELECT nextval('"WalletIdSequence"') AS "Value" """)
+            .SingleAsync();
     }
 
     private async Task<string> GenerateNextWalletId()
     {
-        // PostgreSQL sequence will be implemented here.
-        throw new NotImplementedException();
+        var sequence = await GetNextWalletSequence();
+        return $"WLT-{sequence:D4}";
     }
 }
