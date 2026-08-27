@@ -5,8 +5,8 @@ namespace DigitalWalletDemo.Application.Interfaces;
 public interface ITransactionService
 {
     Task<List<TransactionResponseDto>> GetHistory(
-        string userId,
-        string walletId);
+        Guid userId,
+        Guid walletId);
 
     Task<TransactionResponseDto> Deposit(
     Guid userId,

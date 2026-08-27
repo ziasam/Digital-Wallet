@@ -21,14 +21,14 @@ public class TransactionService
     }
 
     public async Task<List<TransactionResponseDto>> GetHistory(
-        string userId,
-        string walletId)
+        Guid userId,
+        Guid walletId)
     {
         var wallet = await _db.Wallets
             .Include(x => x.User)
             .FirstOrDefaultAsync(
-                x => x.WalletId == walletId &&
-                     x.User.UserId == userId);
+                x => x.Id == walletId &&
+                     x.UserId == userId);
 
         if (wallet == null)
         {
