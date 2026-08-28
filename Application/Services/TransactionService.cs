@@ -1,4 +1,5 @@
 ﻿using DigitalWalletDemo.Application.Dtos.Wallet;
+using DigitalWalletDemo.Application.Exceptions;
 using DigitalWalletDemo.Application.Interfaces;
 using DigitalWalletDemo.Domain.Entities;
 using DigitalWalletDemo.Domain.Enums;
@@ -32,7 +33,7 @@ public class TransactionService
 
         if (wallet == null)
         {
-            throw new Exception(
+            throw new WalletException(
                 "Wallet not found.");
         }
 
@@ -97,7 +98,7 @@ public class TransactionService
 
             if (walletId == Guid.Empty)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Wallet not found.");
             }
 
@@ -106,18 +107,18 @@ public class TransactionService
                 await GetWalletForUpdate(walletId);
 
             if (wallet == null)
-                throw new Exception("Wallet not found.");
+                throw new WalletException("Wallet not found.");
 
             ValidateWallet(wallet);
 
             // 4. Validate amount
             if (request.Amount <= 0)
-                throw new Exception(
+                throw new WalletException(
                     "Amount must be greater than zero.");
 
             // 5. Currency
             if (wallet.Currency != request.Currency)
-                throw new Exception(
+                throw new WalletException(
                     "Currency mismatch.");
 
             // 6. Cooldown
@@ -233,13 +234,13 @@ public class TransactionService
     {
         if (wallet.Status.Equals(WalletStatus.Active))
         {
-            throw new Exception(
+            throw new WalletException(
                 "Wallet is inactive.");
         }
 
         if (wallet.Status.Equals(WalletStatus.Frozen))
         {
-            throw new Exception(
+            throw new WalletException(
                 "Wallet is frozen.");
         }
     }
@@ -255,7 +256,7 @@ public class TransactionService
 
         if (transaction == null)
         {
-            throw new Exception(
+            throw new WalletException(
                 "Existing transaction record was found, but its transaction details are missing.");
         }
 
@@ -320,7 +321,7 @@ public class TransactionService
         if (gapSeconds <
             _minimumTransactionGapSeconds)
         {
-            throw new Exception(
+            throw new TransactionCooldownException(
                 $"Please wait {_minimumTransactionGapSeconds} seconds between transactions.");
         }
     }
@@ -357,7 +358,7 @@ public class TransactionService
 
             if (walletId == Guid.Empty)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Wallet not found.");
             }
 
@@ -367,7 +368,7 @@ public class TransactionService
 
             if (wallet == null)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Wallet not found.");
             }
 
@@ -377,14 +378,14 @@ public class TransactionService
             // 5. Validate amount
             if (request.Amount <= 0)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Amount must be greater than zero.");
             }
 
             // 6. Validate currency
             if (wallet.Currency != request.Currency)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Currency mismatch.");
             }
 
@@ -394,7 +395,7 @@ public class TransactionService
             // 8. Check balance
             if (wallet.Balance < request.Amount)
             {
-                throw new Exception(
+                throw new InsufficientBalanceException(
                     "Insufficient wallet balance.");
             }
 
@@ -533,7 +534,7 @@ public class TransactionService
 
             if (sourceWallet == null)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Source wallet not found.");
             }
 
@@ -546,14 +547,14 @@ public class TransactionService
 
             if (destinationWallet == null)
             {
-                throw new Exception(
-                    "Source wallet not found.");
+                throw new WalletException(
+                    "Destination wallet not found.");
             }
 
             if (sourceWallet.Id ==
                 destinationWallet.Id)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Cannot transfer to the same wallet.");
             }
 
@@ -584,7 +585,7 @@ public class TransactionService
             if (source.Currency != request.Currency ||
                 destination.Currency != request.Currency)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Currency mismatch.");
             }
 
@@ -593,13 +594,13 @@ public class TransactionService
 
             if (source.Balance < request.Amount)
             {
-                throw new Exception(
+                throw new InsufficientBalanceException(
                     "Insufficient balance.");
             }
 
             if (request.Amount <= 0)
             {
-                throw new Exception(
+                throw new WalletException(
                     "Invalid amount.");
             }
 

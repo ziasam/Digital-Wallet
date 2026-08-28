@@ -1,10 +1,9 @@
 ﻿using DigitalWalletDemo.Application.Dtos.Authentication;
+using DigitalWalletDemo.Application.Exceptions;
 using DigitalWalletDemo.Application.Interfaces;
 using DigitalWalletDemo.Domain.Entities;
 using DigitalWalletDemo.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DigitalWalletDemo.Application.Services;
 
@@ -32,7 +31,7 @@ public class AuthService : IAuthService
 
         if (exists)
         {
-            throw new Exception(
+            throw new WalletException(
                 "Email already exists.");
         }
 
@@ -107,13 +106,13 @@ public class AuthService : IAuthService
 
         if (user == null)
         {
-            throw new Exception(
+            throw new WalletException(
                 "Invalid email or password.");
         }
 
         if (user.UserStatus != UserStatus.Active)
         {
-            throw new Exception(
+            throw new WalletException(
                 "User account is inactive.");
         }
 
@@ -124,13 +123,13 @@ public class AuthService : IAuthService
 
         if (!passwordValid)
         {
-            throw new Exception(
+            throw new WalletException(
                 "Invalid email or password.");
         }
 
         if (user.Wallets == null)
         {
-            throw new Exception(
+            throw new WalletException(
                 "User wallet was not found.");
         }
 

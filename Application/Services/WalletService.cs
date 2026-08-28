@@ -1,4 +1,5 @@
 ﻿using DigitalWalletDemo.Application.Dtos.Wallet;
+using DigitalWalletDemo.Application.Exceptions;
 using DigitalWalletDemo.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,7 @@ public class WalletService : IWalletService
 
         if (wallet == null)
         {
-            throw new Exception(
+            throw new WalletException(
                 "Wallet not found.");
         }
 

@@ -2,6 +2,7 @@ using DigitalWalletDemo.Application.Interfaces;
 using DigitalWalletDemo.Application.Services;
 using DigitalWalletDemo.Infrastructure.Authentication;
 using DigitalWalletDemo.Infrastructure.Data;
+using DigitalWalletDemo.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -70,6 +71,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Digital Wallet API v1"));
 }
+
+app.UseMiddleware<CustomExceptionHandler>();
 
 // Configure the HTTP request pipeline.
 
