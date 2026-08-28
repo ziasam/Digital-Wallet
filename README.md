@@ -52,6 +52,10 @@ DigitalWalletDemo
 └── appsettings.Development.json
 ```
 
+### Api
+
+Contains controllers, middleware.
+
 ### Application
 
 Contains application services, DTOs, interfaces, and business exceptions.
