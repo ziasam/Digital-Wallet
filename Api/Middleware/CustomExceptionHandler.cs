@@ -1,6 +1,6 @@
 ﻿using DigitalWalletDemo.Application.Exceptions;
 
-namespace DigitalWalletDemo.Middleware
+namespace DigitalWalletDemo.Api.Middleware
 {
     public class CustomExceptionHandler
     {

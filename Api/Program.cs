@@ -1,8 +1,8 @@
+using DigitalWalletDemo.Api.Middleware;
 using DigitalWalletDemo.Application.Interfaces;
 using DigitalWalletDemo.Application.Services;
 using DigitalWalletDemo.Infrastructure.Authentication;
 using DigitalWalletDemo.Infrastructure.Data;
-using DigitalWalletDemo.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
