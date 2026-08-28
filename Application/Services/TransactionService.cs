@@ -90,9 +90,16 @@ public class TransactionService
 
             // 2. Find wallet
             var walletId = await _db.Wallets
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId 
+                && x.WalletId == request.WalletId)
                 .Select(x => x.Id)
-                .SingleAsync();
+                .SingleOrDefaultAsync();
+
+            if (walletId == Guid.Empty)
+            {
+                throw new Exception(
+                    "Wallet not found.");
+            }
 
             // 3. Lock wallet
             var wallet =
@@ -343,7 +350,8 @@ public class TransactionService
             // 2. Find wallet
             var walletId =
                 await _db.Wallets
-                    .Where(x => x.UserId == userId)
+                    .Where(x => x.UserId == userId
+                    && x.WalletId == request.WalletId)
                     .Select(x => x.Id)
                     .SingleOrDefaultAsync();
 
@@ -520,15 +528,27 @@ public class TransactionService
             // Find source wallet
             var sourceWallet =
                 await _db.Wallets
-                    .SingleAsync(
+                    .SingleOrDefaultAsync(
                         x => x.UserId == userId);
+
+            if (sourceWallet == null)
+            {
+                throw new Exception(
+                    "Source wallet not found.");
+            }
 
             // Find destination
             var destinationWallet =
                 await _db.Wallets
-                    .SingleAsync(
+                    .SingleOrDefaultAsync(
                         x => x.WalletId ==
                              request.ToWalletId);
+
+            if (destinationWallet == null)
+            {
+                throw new Exception(
+                    "Source wallet not found.");
+            }
 
             if (sourceWallet.Id ==
                 destinationWallet.Id)
@@ -542,7 +562,7 @@ public class TransactionService
             {
             sourceWallet.Id,
             destinationWallet.Id
-        }
+            }
             .OrderBy(x => x)
             .ToArray();
 
