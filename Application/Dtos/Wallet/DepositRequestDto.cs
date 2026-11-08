@@ -1,0 +1,17 @@
+﻿namespace DigitalWallet.Application.Dtos.Wallet
+{
+    public class DepositRequestDto
+    {
+        public string WalletId { get; set; } = null!;
+
+        public decimal Amount { get; set; }
+
+        public string Currency { get; set; } = null!;
+
+        public string? Counterparty { get; set; }
+
+        public string? Reference { get; set; }
+
+        public string IdempotencyKey { get; set; } = string.Empty;
+    }
+}

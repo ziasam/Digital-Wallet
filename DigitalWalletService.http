@@ -1,0 +1,58 @@
+@host = http://localhost:5003
+@token = paste-token-from-auth-service-here
+
+### Create wallet
+POST {{host}}/api/wallet
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "currency": "BDT"
+}
+
+### List my wallets
+GET {{host}}/api/wallet
+Authorization: Bearer {{token}}
+
+### Get one wallet
+GET {{host}}/api/wallet/WLT-1001
+Authorization: Bearer {{token}}
+
+### Deposit
+POST {{host}}/api/transactions/deposit
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "walletId": "WLT-1001",
+  "amount": 1000,
+  "currency": "BDT",
+  "reference": "top-up",
+  "idempotencyKey": "dep-001"
+}
+
+### Withdraw
+POST {{host}}/api/transactions/withdraw
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "walletId": "WLT-1001",
+  "amount": 100,
+  "currency": "BDT",
+  "reference": "cash-out",
+  "idempotencyKey": "wd-001"
+}
+
+### Transfer
+POST {{host}}/api/transactions/transfer
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "toWalletId": "WLT-1002",
+  "amount": 50,
+  "currency": "BDT",
+  "reference": "pay-friend",
+  "idempotencyKey": "tr-001"
+}
