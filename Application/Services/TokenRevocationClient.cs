@@ -37,7 +37,7 @@ namespace DigitalWalletService.Application.Services
         {
             var response = await _httpClient.PostAsJsonAsync(
                 "api/tokens/check",
-                new { Jti = jti, UserId = userId },
+                new CheckTokenRequestDto { Token = jti },
                 cancellationToken);
 
             response.EnsureSuccessStatusCode();
