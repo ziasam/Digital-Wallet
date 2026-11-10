@@ -40,19 +40,30 @@ builder.Services
         options.RequireHttpsMetadata =
             bool.Parse(jwtSection["RequireHttpsMetadata"] ?? "false");
 
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = jwtSection["Issuer"],
+        options.MapInboundClaims = false;
 
-            ValidateAudience = true,
-            ValidAudience = jwtSection["Audience"],
+        options.RefreshOnIssuerKeyNotFound = true;
 
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtSection["Issuer"],
 
-            ClockSkew = TimeSpan.FromMinutes(1)
-        };
+                ValidateAudience = true,
+                ValidAudience = jwtSection["Audience"],
+
+                ValidateLifetime = true,
+
+                ValidateIssuerSigningKey = true,
+
+                ValidAlgorithms = new[]
+                {
+                    SecurityAlgorithms.RsaSha256
+                },
+
+                ClockSkew = TimeSpan.FromMinutes(1)
+            };
 
         options.Events = new JwtBearerEvents
         {
@@ -84,9 +95,6 @@ builder.Services
                 }
             }
         };
-
-        // Map "sub" → ClaimTypes.NameIdentifier
-        options.MapInboundClaims = false;
     });
 
 builder.Services.AddScoped<
