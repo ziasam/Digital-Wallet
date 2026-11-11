@@ -48,7 +48,7 @@ builder.Services
 
         options.MapInboundClaims = false;
 
-        var automaticRefreshInterval = TimeSpan.FromHours(jwtSection.GetValue<int>("AutomaticRefreshIntervalMinutes", 12));
+        var automaticRefreshInterval = TimeSpan.FromMinutes(jwtSection.GetValue<int>("AutomaticRefreshIntervalMinutes", 15));
         var refreshInterval = TimeSpan.FromMinutes(jwtSection.GetValue<int>("RefreshIntervalMinutes", 5));
         var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
                                                 metadataAddress,
@@ -56,7 +56,8 @@ builder.Services
                                                 new HttpDocumentRetriever { RequireHttps = requireHttpsMetaData })
         {
             AutomaticRefreshInterval = automaticRefreshInterval,
-            RefreshInterval = refreshInterval
+            RefreshInterval = refreshInterval,
+            LastKnownGoodLifetime = TimeSpan.Zero,
         };
         options.ConfigurationManager = configurationManager;
 
