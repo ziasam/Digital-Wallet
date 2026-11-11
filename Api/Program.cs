@@ -6,6 +6,8 @@ using DigitalWalletService.Application.Interfaces;
 using DigitalWalletService.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,15 +34,32 @@ builder.Services
     {
         var jwtSection = builder.Configuration.GetSection("Jwt");
 
-        options.MetadataAddress =
+        var metadataAddress =
             jwtSection["MetadataAddress"]
             ?? throw new InvalidOperationException(
                 "Jwt:MetadataAddress is not configured.");
 
-        options.RequireHttpsMetadata =
-            bool.Parse(jwtSection["RequireHttpsMetadata"] ?? "false");
+        options.MetadataAddress = metadataAddress;
+
+        var requireHttpsMetaData = bool.Parse(
+            jwtSection["RequireHttpsMetadata"] ?? "false");
+
+        options.RequireHttpsMetadata = requireHttpsMetaData;
 
         options.MapInboundClaims = false;
+
+        var automaticRefreshInterval = TimeSpan.FromHours(jwtSection.GetValue<int>("AutomaticRefreshIntervalMinutes", 12));
+        var refreshInterval = TimeSpan.FromMinutes(jwtSection.GetValue<int>("RefreshIntervalMinutes", 5));
+        var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
+                                                metadataAddress,
+                                                new OpenIdConnectConfigurationRetriever(),
+                                                new HttpDocumentRetriever { RequireHttps = requireHttpsMetaData })
+        {
+            AutomaticRefreshInterval = automaticRefreshInterval,
+            RefreshInterval = refreshInterval
+        };
+        options.ConfigurationManager = configurationManager;
+
 
         options.RefreshOnIssuerKeyNotFound = true;
 
@@ -62,7 +81,13 @@ builder.Services
                     SecurityAlgorithms.RsaSha256
                 },
 
-                ClockSkew = TimeSpan.FromMinutes(1)
+                ClockSkew = TimeSpan.FromMinutes(1),
+
+                IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
+                {
+                    var config = configurationManager.GetConfigurationAsync(CancellationToken.None).GetAwaiter().GetResult();
+                    return config.SigningKeys;
+                }
             };
 
         options.Events = new JwtBearerEvents
