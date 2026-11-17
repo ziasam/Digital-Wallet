@@ -4,7 +4,10 @@ using DigitalWallet.Application.Services;
 using DigitalWallet.Infrastructure.Data;
 using DigitalWalletService.Application.Interfaces;
 using DigitalWalletService.Application.Services;
+using DigitalWalletService.Domain.Constants;
+using DigitalWalletService.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -135,7 +138,21 @@ builder.Services.AddScoped<
     ITransactionService,
     TransactionService>();
 
-builder.Services.AddAuthorization();
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    // One policy per permission code: "Permission:users.read"
+    foreach (var permission in Permissions.All)
+    {
+        options.AddPolicy(
+            $"Permission:{permission}",
+            policy => policy.Requirements.Add(new PermissionRequirement(permission)));
+
+        options.AddPolicy("RequireAdmin", policy => policy.RequireRole(Roles.Admin));
+        options.AddPolicy("RequireModerator", policy =>
+            policy.RequireRole(Roles.Admin, Roles.Moderator));
+    }
+});
 
 builder.Services.AddControllers();
 

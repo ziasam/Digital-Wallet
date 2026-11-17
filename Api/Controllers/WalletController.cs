@@ -1,5 +1,7 @@
 using DigitalWallet.Application.Dtos.Wallet;
 using DigitalWallet.Application.Interfaces;
+using DigitalWalletService.Api.Attributes;
+using DigitalWalletService.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -22,6 +24,7 @@ public class WalletController : ControllerBase
     /// Create a wallet for the authenticated user (sub claim from Auth Service).
     /// </summary>
     [HttpPost]
+    [HasPermission(Permissions.RolesManage)]
     public async Task<IActionResult> CreateWallet(
         [FromBody] CreateWalletRequestDto? request)
     {
